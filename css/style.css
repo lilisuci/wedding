@@ -329,7 +329,7 @@ h1, h2, h3, h4, h5, h6 {
   .qbootstrap-hero {
     height: 700px;
   }
-  .qbootstrap-cover {
+  .qbootstrap-cover, #qbootstrap-countdown, #qbootstrap-started {
     background-image: url('../images/lilimobil.jpeg') !important;
     background-size: cover;
     background-position: center !important;
