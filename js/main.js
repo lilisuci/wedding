@@ -290,6 +290,66 @@
 	var bgVideo = function() {
 		$('.player').mb_YTPlayer();
 	};
+
+	// Send data to firebase
+	var invitation = function () {
+
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyAm05fI_oYuaknsHRZ-V5XprwansegNbvs",
+			authDomain: "wedding-lili-c6cb7.firebaseapp.com",
+			databaseURL: "https://wedding-lili-c6cb7.firebaseio.com",
+			projectId: "wedding-lili-c6cb7",
+			storageBucket: "wedding-lili-c6cb7.appspot.com",
+			messagingSenderId: "408146927393"
+		};
+		firebase.initializeApp(config);
+
+		// Initialize Cloud Firestore through Firebase
+		var db = firebase.firestore();
+		var settings = { timestampsInSnapshots: true };
+		db.settings(settings);
+	  
+
+		// Listen for #invitation-form submitted
+		$('#invitation-form').on('submit', function (e) {
+			e.preventDefault();
+			var buttonSubmit = $(this).find('button')  // Submit button
+			buttonSubmit.attr("disabled", true)
+			$("#name").attr("disabled", true)
+			$("#email").attr("disabled", true)
+			$("#pesan").attr("disabled", true)
+			
+			// Add a new document with a generated id.
+			db.collection("invitations").add({
+				name: $("#name").val(),
+				email: $("#email").val(),
+				message: $("#pesan").val(),
+				createdAt: new Date(),
+			})
+			.then(function(docRef) {
+				$("#name").val("")
+				$("#email").val("")
+				$("#pesan").val("")
+				
+				buttonSubmit.attr("disabled", false) // Submit button
+				$("#name").attr("disabled", false)
+				$("#email").attr("disabled", false)
+				$("#pesan").attr("disabled", false)
+				alert("Terima kasih!")
+				console.log("Document written with ID: ", docRef.id);
+			})
+			.catch(function(error) {
+				buttonSubmit.attr("disabled", false) // Submit button
+				$("#name").attr("disabled", false)
+				$("#email").attr("disabled", false)
+				$("#pesan").attr("disabled", false)
+				alert("Opps gagal!")
+				console.error("Error adding document: ", error);
+			});
+
+		})
+	}
         
 
 	// Document on load.
@@ -305,6 +365,8 @@
 		contentWayPoint();
 		inlineSVG();
 		bgVideo();
+		invitation();
+		
 	});
 
 
